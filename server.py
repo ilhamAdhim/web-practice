@@ -26,15 +26,29 @@ posts = [
 	{
 		"author" 		: "Ilham",
 		"post_date" 	: "August 20, 2019",
-		"content_title"	: "first post",
+		"content_title"	: "First post",
 		"content"		: "lorem ipsum dolor si amet"
 	},
 
 	{
 		"author" 		: "Adhim Mc",
 		"post_date" 	: "July 12, 2019",
-		"content_title"	: "second post",
+		"content_title"	: "Second post",
 		"content"		: "lorem ipsum dolor si amet second"
+	},
+
+	{
+		"author" 		: "ilhamm179",
+		"post_date" 	: "March 18, 2019",
+		"content_title"	: "Third post",
+		"content"		: "lorem ipsum dolor si amet third"
+	},
+	
+	{
+		"author" 		: "TestUser",
+		"post_date" 	: "July 20, 2019",
+		"content_title"	: "Fourth post",
+		"content"		: "lorem ipsum dolor si amet Fourth"
 	}
 ]
 
@@ -59,21 +73,28 @@ def register():
   form = RegistrationForm()
 
   if form.validate_on_submit():
-  		
   		flash(f'Account created for { form.username.data }! ' , 'success')
   		return redirect('home')
+  # else :
+  # 		flash(f'Account cannot be created ! check registration rules correctly ' , 'danger')
+
+  		
 
 # below Python 3.6 use this one :
 # flash('Account created for {}!'.format({form.username.data}))
 
-  	
   return render_template('register.html' , title='Register' , form = form)
 
 
-@app.route("/login")
+@app.route("/login" , methods = ['GET','POST'])
 def login():
   Loginform = LoginForm()
-  return render_template('login.html')
+
+  if Loginform.validate_on_submit():
+  		flash(f'You are signed in as { Loginform.username.data }! ' , 'success')
+  		return redirect('home')
+  
+  return render_template('login.html' , title='Login' , Loginform = Loginform)
 
 
 
