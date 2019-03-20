@@ -1,26 +1,47 @@
 #import flask
 # render_template digunakan untuk merender html dan css . 
-# url_for digunakan di file layout.html untuk mencari file css
-from flask import Flask ,jsonify ,request,render_template, url_for , flash , redirect
-from forms import RegistrationForm , LoginForm
-#membuat aplikasi flask 	 	
+# url_for is used in file layout.html to search css file
+# flash is used to send alert within the web page
+# redirect library is used to redirect to other page when the user complete the login fomr
+from datetime import datetime
+from flask import Flask, render_template, url_for, flash, redirect
+from flask_sqlalchemy import SQLAlchemy
+from forms import RegistrationForm, LoginForm
+
 app = Flask(__name__)
+app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+db = SQLAlchemy(app)
+
+# TESSSSTT2 d
+
+class User(db.Model):
+	# id set to primary key 
+
+    id = db.Column(db.Integer, primary_key = True)
+    username = db.Column(db.String(20), unique=True, nullable = False)
+    email = db.Column(db.String(120), unique=True, nullable = False)
+    image_file = db.Column(db.String(20), nullable = False, default = 'default.jpg')
+    password = db.Column(db.String(60), nullable = False)
+
+	# backref is used to make additional column in Post database. 
+    posts = db.relationship('Post', backref='author', lazy=True)
+
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
 
-app.config['SECRET_KEY'] = '3ac9f1844e2e16c02698d86c05047fde'
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(100), nullable = False)
+    date_posted = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
+    content = db.Column(db.Text, nullable = False)
+    # user.id . the U is not in uppercase , because it is referencing from
+	# table name and column name
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
 
-
-
-biodata = [	
-    {
-        "nama": "budi",
-        "alamat": "malang"
-    },
-    {
-        "nama": "ananta",
-        "alamat": "malang"
-    }
-]
+def __repr__(self):
+        return f"Post('{self.title}', '{self.date_posted}')"
 
 posts = [
 	{
@@ -73,16 +94,12 @@ def register():
   form = RegistrationForm()
 
   if form.validate_on_submit():
+	# below Python 3.6 use this one :
+	# flash('Account created for {}!'.format({form.username.data}))
   		flash(f'Account created for { form.username.data }! ' , 'success')
   		return redirect('home')
   # else :
-  # 		flash(f'Account cannot be created ! check registration rules correctly ' , 'danger')
-
-  		
-
-# below Python 3.6 use this one :
-# flash('Account created for {}!'.format({form.username.data}))
-
+  #		flash(f'Account cannot be created ! check registration rules correctly ' , 'danger')
   return render_template('register.html' , title='Register' , form = form)
 
 
