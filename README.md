@@ -6,6 +6,10 @@ This repository is my exercise which is derived from Corey Schafer youtube tutor
 Python Flask Tutorial: Full-Featured Web App
 link : https://www.youtube.com/watch?v=MwZwr5Tvyxo&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH
 
+In this directory. the important one is run.py and flaskblog
+
+
+
 17 March 2019 
     -) Getting started on Flask 
     -) Make some basic routes : login , home , register , about
