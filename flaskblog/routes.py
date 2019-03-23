@@ -45,6 +45,7 @@ def register():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         # use hashed_password to pass into user variables in User class in models.py
         user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        # Add to database
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
@@ -65,7 +66,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         # Pass user variable to condition
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            # use to let user logged in
+            # use to let user logged in by class inside the flask_login module
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             flash(f'You are logged in as {user.username} !' , 'success')
