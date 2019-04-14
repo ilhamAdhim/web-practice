@@ -1,6 +1,3 @@
-By Muhammad Ilham Adhim
-
-
 This repository is my exercise which is derived from Corey Schafer youtube tutorial
 
 Python Flask Tutorial: <br>Full-Featured Web App
